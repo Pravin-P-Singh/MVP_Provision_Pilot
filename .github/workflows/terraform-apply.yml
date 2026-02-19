@@ -1,0 +1,66 @@
+name: Terraform Provision Pipeline
+
+on:
+  workflow_run:
+    workflows: ["YAML Request Trigger Pipeline"]
+    types:
+      - completed
+
+jobs:
+
+  terraform:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - name: Checkout repo
+      uses: actions/checkout@v3
+
+    - name: Install Terraform
+      uses: hashicorp/setup-terraform@v2
+
+    - name: Find YAML file
+      id: findyaml
+      run: |
+        FILE=$(find . -name "*.yaml" | head -n 1)
+        echo "yaml_file=$FILE" >> $GITHUB_OUTPUT
+
+    - name: Install yq parser
+      run: sudo apt install yq -y
+
+    - name: Extract values from YAML
+      id: extract
+      run: |
+
+        COMPANY=$(yq '.companyName' ${{ steps.findyaml.outputs.yaml_file }})
+        PROJECT=$(yq '.projectName' ${{ steps.findyaml.outputs.yaml_file }})
+        LOCATION=$(yq '.location' ${{ steps.findyaml.outputs.yaml_file }})
+        SIZE=$(yq '.vmSize' ${{ steps.findyaml.outputs.yaml_file }})
+        USER=$(yq '.adminUsername' ${{ steps.findyaml.outputs.yaml_file }})
+        SSH=$(yq '.sshPublicKey' ${{ steps.findyaml.outputs.yaml_file }})
+
+        echo "company=$COMPANY" >> $GITHUB_OUTPUT
+        echo "project=$PROJECT" >> $GITHUB_OUTPUT
+        echo "location=$LOCATION" >> $GITHUB_OUTPUT
+        echo "size=$SIZE" >> $GITHUB_OUTPUT
+        echo "user=$USER" >> $GITHUB_OUTPUT
+        echo "ssh=$SSH" >> $GITHUB_OUTPUT
+
+    - name: Terraform Init
+      run: |
+        cd terraform/modules/vm
+        terraform init
+
+    - name: Terraform Apply
+      run: |
+
+        cd terraform/modules/vm
+
+        terraform apply -auto-approve \
+        -var="company_name=${{ steps.extract.outputs.company }}" \
+        -var="project_name=${{ steps.extract.outputs.project }}" \
+        -var="location=${{ steps.extract.outputs.location }}" \
+        -var="vm_size=${{ steps.extract.outputs.size }}" \
+        -var="admin_username=${{ steps.extract.outputs.user }}" \
+        -var="ssh_public_key=${{ steps.extract.outputs.ssh }}"
