@@ -1,0 +1,30 @@
+name: YAML Request Trigger Pipeline
+
+on:
+  push:
+    paths:
+      - '**/yaml_files/*.yaml'
+
+jobs:
+
+  detect-yaml:
+
+    runs-on: ubuntu-latest
+
+    outputs:
+      yaml_file: ${{ steps.getfile.outputs.file }}
+
+    steps:
+
+    - name: Checkout repo
+      uses: actions/checkout@v3
+
+    - name: Get committed YAML file
+      id: getfile
+      run: |
+        FILE=$(git diff --name-only HEAD^ HEAD | grep yaml_files | head -n 1)
+        echo "file=$FILE" >> $GITHUB_OUTPUT
+
+    - name: Print YAML file
+      run: |
+        echo "Detected file: ${{ steps.getfile.outputs.file }}"
