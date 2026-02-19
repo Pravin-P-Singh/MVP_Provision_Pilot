@@ -1,0 +1,10 @@
+companyName: companyA
+projectName: projectY
+resourceName: vm
+location: centralindia
+vmSize: Standard_B2s
+osType: windows
+adminUsername: azureuser
+authenticationType: password
+adminPassword: StrongPassword123!
+sshPublicKey: 
