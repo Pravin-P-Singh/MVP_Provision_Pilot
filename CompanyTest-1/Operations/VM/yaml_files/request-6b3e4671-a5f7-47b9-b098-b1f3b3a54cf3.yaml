@@ -1,0 +1,10 @@
+companyName: CompanyTest-1
+projectName: Operations
+resourceName: VM
+location: US East 2
+vmSize: 1000GB
+osType: Linux
+adminUsername: pravin
+authenticationType: password
+adminPassword: 123
+sshPublicKey: ssh1223wdnasm..
