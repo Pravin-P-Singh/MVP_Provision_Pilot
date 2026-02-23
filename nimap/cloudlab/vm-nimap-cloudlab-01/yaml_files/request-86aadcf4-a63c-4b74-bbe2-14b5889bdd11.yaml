@@ -1,0 +1,10 @@
+companyName: nimap
+projectName: cloudlab
+resourceName: vm-nimap-cloudlab-01
+location: southeastasia
+vmSize: Standard_B2s
+osType: linux
+adminUsername: azureuser
+authenticationType: password
+adminPassword: Nimap@123456
+sshPublicKey: ''
