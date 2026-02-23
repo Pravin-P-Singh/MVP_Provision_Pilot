@@ -1,0 +1,10 @@
+companyName: OrangeBusiness
+projectName: DevAutomationPortal
+resourceName: vnet
+location: EastUS
+vmSize: Standard_B2s
+osType: Windows
+adminUsername: azureadmin
+authenticationType: Password
+adminPassword: P@ssw0rd1234!
+sshPublicKey: 
