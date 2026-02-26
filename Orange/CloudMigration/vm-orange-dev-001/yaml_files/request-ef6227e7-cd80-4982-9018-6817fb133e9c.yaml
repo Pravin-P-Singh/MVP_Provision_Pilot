@@ -1,0 +1,10 @@
+companyName: Orange
+projectName: CloudMigration
+resourceName: vm-orange-dev-001
+location: southeastasia
+vmSize: Standard_B2s
+osType: Windows
+adminUsername: azureadmin
+authenticationType: password
+adminPassword: P@ssw0rd123!
+sshPublicKey: ''
